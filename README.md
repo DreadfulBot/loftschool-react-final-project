@@ -1,1 +1,1 @@
-# loftschool-react-final-project
+# Финальный проект
