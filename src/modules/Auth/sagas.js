@@ -14,7 +14,7 @@ function *loginFlow() {
     }
 }
 
-handleCancel = () => {
+const handleCancel = () => {
 
 }
 
