@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
-import PrivateRoute from '../PrivateRoute';
+// import PrivateRoute from '../PrivateRoute';
 import Login from '../Login';
-import Search from '../Search';
 
 // Реализуйте роутер
 
@@ -16,7 +15,7 @@ class AppRouter extends Component {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={Login} />
-          <PrivateRoute path="/search" component={Search} />
+          {/* <PrivateRoute path="/search" component={Search} /> */}
           <Redirect to="/" />
         </Switch>
       </BrowserRouter>
