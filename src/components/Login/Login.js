@@ -1,68 +1,100 @@
-import React, { PureComponent } from 'react';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'react-redux';
+
+import { Grid, Paper } from '@material-ui/core';
+
+import bg from './assets/login-bg.jpg';
+
+import { LoginForm } from './partials';
+import { authRequest, getError, getIsLoading } from '../../modules/Auth';
+
+import { withStyles } from '@material-ui/core';
+import { withLoader } from '../../hocs';
+
+import Snackbar from '../Snackbar';
 
 const styles = theme => ({
-  root: {
+  background: {
+    backgroundImage: `url(${bg})`,
+    backgroundPosition: 'top',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    filter: 'blur(3px) grayscale(90%)',
+    height: '100%',
+  },
+  paper: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-    width: 400
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%);',
+    width: 400,
+    backgroundColor: '#FFCA28',
   },
-  paragraph: {
-    width: '100%',
-    textAlign: 'center'
+  error: {
+    backgroundColor: theme.palette.error.dark
   },
-  input: {
-    width: '100%'
+  icon: {
+    fontSize: 20
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center'
   }
 });
 
 class Login extends PureComponent {
-  // todo: remove api key
+  // todo: remove credentials
   state = {
-    inputValue: ''
-  };
-  handleChange = event => {
-    this.setState({ inputValue: event.target.value });
+    name: 'test@test.com',
+    password: '123123'
   };
 
-  handleKeyPress = event => {
-    const { inputValue } = this.state;
-    const { onEnter } = this.props;
-
-    if (event.key === 'Enter') {
-      onEnter(inputValue);
-    }
+  handleAuthRequest = values => {
+    const { authRequest } = this.props;
+    authRequest(values);
   };
+
   render() {
-    const { classes } = this.props;
-    const { inputValue } = this.state;
+    const { classes, error } = this.props;
+    const { name, password } = this.state;
     return (
-      <Paper className={classes.root}>
-        <Typography className={classes.paragraph} component="p">
-          Для получения ключа авторизации необходимо зарегестрироваться на сайте{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://api.nasa.gov/api.html#authentication"
-          >
-            NASA
-          </a>
-        </Typography>
-        <TextField
-          value={inputValue}
-          onChange={this.handleChange}
-          onKeyPress={this.handleKeyPress}
-          className={classes.input}
-          label="Nasa API Key"
-          margin="dense"
-        />
-      </Paper>
+      <Fragment>
+        <div className={classes.background} />
+
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Paper className={classes.paper}>
+            <LoginForm
+              name={name}
+              password={password}
+              handleSubmit={this.handleAuthRequest}
+            />
+          </Paper>
+        </Grid>
+
+        {error && <Snackbar message={error} variant="error" />}
+
+      </Fragment>
     );
   }
 }
 
-export default withStyles(styles)(Login);
+const mapStateToProps = state => ({
+  error: getError(state),
+  isLoading: getIsLoading(state),
+});
+
+const mapDispatchToProps = {
+  authRequest,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withLoader(withStyles(styles)(Login)));

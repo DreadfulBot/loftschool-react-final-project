@@ -9,7 +9,7 @@ import Login from '../Login';
 // Вам потребуется использовать PrivateRoute для Search
 // По умолчанию нужно перенаправлять на страницу логина
 
-class AppRouter extends Component {
+class Router extends Component {
   render() {
     return (
       <BrowserRouter>
@@ -23,4 +23,4 @@ class AppRouter extends Component {
   }
 }
 
-export default AppRouter;
+export default Router;

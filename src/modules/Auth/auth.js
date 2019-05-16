@@ -8,4 +8,24 @@ const isAuth = handleActions({
     [authError]: () => false,
 }, false);
 
-export default combineReducers({isAuth});
+const isLoading = handleActions({
+    [authRequest]: () => true,
+    [authSuccess]: () => false,
+    [authError]: () => false,
+}, false);
+
+const error = handleActions({
+    [authRequest]: () => '',
+    [authSuccess]: () => '',
+    [authError]: (state, action) => action.payload
+}, '')
+
+const name = handleActions({
+    [authRequest]: (state, action) => action.payload.name,
+}, '');
+
+const password = handleActions({
+    [authRequest]: (state, action) => action.payload.password,
+}, '');
+
+export default combineReducers({isAuth, name, password, error, isLoading});

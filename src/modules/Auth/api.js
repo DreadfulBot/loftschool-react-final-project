@@ -1,12 +1,24 @@
-export const auth = (username, password) =>
-  fetch(
-    `https://loft-taxi.glitch.me/auth?username=${username}&password=${password}`
-  ).then(response => {
-    const { success, error } = response;
-    
-    if(!success) {
-      throw error;
-    }
+import axios from 'axios';
 
-    return response.json();
-  });
+var config = {
+  timeout: 3000
+};
+
+export const auth = (username, password) =>
+  axios
+    .get(
+      `https://loft-taxi.glitch.me/auth?username=${username}&password=${password}`,
+      config
+    )
+    .then(response => {
+      const { data } = response;
+
+      const { success, error } = data;
+
+      if (!success) {
+        const exception = { message: error || 'unable to auth' };
+        throw exception;
+      }
+
+      return data;
+    });

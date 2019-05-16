@@ -1,7 +1,29 @@
 import React, { PureComponent, Fragment } from 'react';
+import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import SectionTitle from '../SectionTitle';
 import cs from 'classnames';
+
+const styles = theme => ({
+  header: {
+
+  },
+
+  mainWithHeader: {
+
+  },
+
+  mainWithFooter: {
+
+  },
+
+  main: {
+    height: '100vh'
+  },
+
+  mainWithFooterAndHeader: {
+
+  }
+});
 
 class Layout extends PureComponent {
   static propTypes = {
@@ -11,42 +33,38 @@ class Layout extends PureComponent {
 
   renderMain = className => {
     const { children } = this.props;
-    return (
-      <main className={className}>
-        <SectionTitle>Main</SectionTitle>
-        {children}
-      </main>
-    );
+    return <main className={className}>{children}</main>;
   };
 
-  renderHeader = HeaderChild =>
-    HeaderChild ? (
-      <header className="header">
-        <SectionTitle className="header__title section-title">
-          Header
-        </SectionTitle>
+  renderHeader = HeaderChild => {
+    const { classes } = this.props;
+
+    return HeaderChild ? (
+      <header className={cs('header', classes.header)}>
         <div className="header__content">
           <HeaderChild />
         </div>
       </header>
     ) : null;
+  };
 
-  renderFooter = FooterChild =>
-    FooterChild ? (
-      <footer className="footer">
-        <SectionTitle className="header__title section-title">
-          Footer
-        </SectionTitle>
+  renderFooter = FooterChild => {
+    const { classes } = this.props;
+
+    return FooterChild ? (
+      <footer className={cs('footer', classes.footer)}>
         <FooterChild />
       </footer>
     ) : null;
+  };
 
   render() {
-    const { header, footer } = this.props;
+    const { header, footer, classes } = this.props;
     const mainClassName = cs(
-      'main',
-      { 'main--with-header': header },
-      { 'main--with-footer': footer }
+      classes.main,
+      footer && classes.mainWithFooter,
+      header && classes.mainWithHeader,
+      header && footer && classes.mainWithFooterAndHeader
     );
 
     return (
@@ -59,4 +77,4 @@ class Layout extends PureComponent {
   }
 }
 
-export default Layout;
+export default withStyles(styles)(Layout);
