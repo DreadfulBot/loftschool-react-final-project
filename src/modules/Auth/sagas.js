@@ -1,12 +1,12 @@
-import { fork, call, take, takeEvery, put, cancel, cancelled } from 'redux-saga/effects';
+import { fork, call, take, put, cancel, cancelled } from 'redux-saga/effects';
 import { authRequest, authSuccess, authError, logoutRequest } from './actions';
 import { auth } from './api'; 
 
 function *loginFlow() {
     while(true) {
         const request = yield take(authRequest);
-        const { name, password } = request.payload;
-        const task = yield fork(authorize, name, password);
+        const { user, password } = request.payload;
+        const task = yield fork(authorize, user, password);
         const action = yield take([logoutRequest, authError]);
 
         if(action.type === logoutRequest.toString()) {

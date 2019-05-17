@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
@@ -127,14 +126,13 @@ class CustomizedSnackbar extends React.Component {
   };
 
   render() {
-    const { message, variant } = this.props;
+    const { message, variant, open: openProps } = this.props;
     const { open } = this.state;
 
     return (
       <Snackbar
         anchorOrigin={this.anchorOrigin}
-        open={open}
-        autoHideDuration={5000}
+        open={open || openProps}
         onClose={this.handleClose}
       >
         <MySnackbarContentWrapper
@@ -149,7 +147,12 @@ class CustomizedSnackbar extends React.Component {
 
 CustomizedSnackbar.propTypes = {
   message: PropTypes.string.isRequired,
-  variant: PropTypes.string.isRequired
+  variant: PropTypes.string.isRequired,
+  open: PropTypes.bool,
+};
+
+CustomizedSnackbar.defaultProps = {
+  open: false
 };
 
 export default withStyles(styles2)(CustomizedSnackbar);

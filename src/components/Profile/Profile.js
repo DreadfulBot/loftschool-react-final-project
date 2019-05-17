@@ -5,8 +5,13 @@ import { Grid, Paper } from '@material-ui/core';
 
 import bg from '../../assets/login-bg.jpg';
 
-import { LoginForm } from './partials';
-import { authRequest, getError, getIsLoading } from '../../modules/Auth';
+import { ProfileForm } from './partials';
+import {
+  getError,
+  getIsLoading,
+  getProfile,
+  saveProfileSuccess
+} from '../../modules/Profile';
 
 import { withStyles } from '@material-ui/core';
 import { withLoader } from '../../hocs';
@@ -30,7 +35,7 @@ const styles = theme => ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%);',
-    width: 400,
+    width: 1000,
     backgroundColor: '#FFCA28'
   },
   error: {
@@ -49,21 +54,31 @@ const styles = theme => ({
   }
 });
 
-class Login extends PureComponent {
-  // todo: remove credentials
+class Profile extends PureComponent {
   state = {
-    user: 'test@test.com',
-    password: '123123'
+    notificationVisible: false,
   };
 
-  handleAuthRequest = values => {
-    const { authRequest } = this.props;
-    authRequest(values);
+  handleProfileSave = values => {
+    const { saveProfileSuccess } = this.props;
+    saveProfileSuccess(values);
+    
+    this.setState({
+      notificationVisible: true
+    });
+
+    setTimeout(x => {
+      this.setState({
+        notificationVisible: false, 
+      })
+    }, 2000);
+    
   };
 
   render() {
-    const { classes, error } = this.props;
-    const { user, password } = this.state;
+    const { classes, error, profile } = this.props;
+    const { cardName, cardNumber, expDate, cvv } = profile;
+    const { notificationVisible } = this.state;
     return (
       <Fragment>
         <div className={classes.background} />
@@ -75,14 +90,22 @@ class Login extends PureComponent {
           alignItems="center"
         >
           <Paper className={classes.paper}>
-            <LoginForm
-              user={user}
-              password={password}
-              handleSubmit={this.handleAuthRequest}
+            <ProfileForm
+              cardName={cardName}
+              cardNumber={cardNumber}
+              expDate={expDate}
+              cvv={cvv}
+              handleSubmit={this.handleProfileSave}
             />
           </Paper>
         </Grid>
-
+        {notificationVisible && (
+          <Snackbar
+            message="Профиль успешно сохранен"
+            variant="success"
+            open={notificationVisible}
+          />
+        )}
         {error && <Snackbar message={error} variant="error" />}
       </Fragment>
     );
@@ -91,14 +114,15 @@ class Login extends PureComponent {
 
 const mapStateToProps = state => ({
   error: getError(state),
-  isLoading: getIsLoading(state)
+  isLoading: getIsLoading(state),
+  profile: getProfile(state)
 });
 
 const mapDispatchToProps = {
-  authRequest
+  saveProfileSuccess
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withLoader(withStyles(styles)(Login)));
+)(withLoader(withStyles(styles)(Profile)));

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { shallowEqual } from 'recompose';
 
 import { TextField } from 'formik-material-ui';
 import { withStyles } from '@material-ui/core/styles';
@@ -24,7 +25,7 @@ const styles = theme => ({
 });
 
 const LoginSchema = Yup.object().shape({
-  name: Yup.string()
+  user: Yup.string()
     .email('Имя должно быть в формате email')
     .min(2, 'Слишком короткое имя')
     .max(50, 'Слишком длинное имя')
@@ -37,24 +38,35 @@ const LoginSchema = Yup.object().shape({
 
 class LoginForm extends PureComponent {
   static propTypes = {
-    name: PropTypes.string,
+    user: PropTypes.string,
     password: PropTypes.string,
     handleSubmit: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    name: '',
+    user: '',
     password: ''
   };
 
   getInitialValues = () => {
-    const { name, password } = this.props;
-    return { name, password };
+    const { user, password } = this.props;
+    return { user, password };
   };
 
   handleFormSubmit = (values, { setSubmitting }) => {
+    const isChanged = !shallowEqual(this.getInitialValues(), values);
+
+    if (!isChanged) {
+      setSubmitting(false);
+      return;
+    }
+
     const { handleSubmit } = this.props;
-    handleSubmit({...values, setSubmitting});
+    handleSubmit({
+      ...values,
+      setSubmitting
+    });
+    setSubmitting(false);
   };
 
   render() {
@@ -68,13 +80,12 @@ class LoginForm extends PureComponent {
       >
         {({ errors, touched }) => (
           <Form>
-            
             <Typography className={classes.paragraph} component="p">
               Войти
             </Typography>
-            
+
             <Field
-              name="name"
+              name="user"
               className={classes.input}
               label="Имя пользователя"
               margin="dense"
@@ -92,7 +103,6 @@ class LoginForm extends PureComponent {
             <Button type="submit" variant="outlined" className={classes.button}>
               Войти
             </Button>
-
           </Form>
         )}
       </Formik>
