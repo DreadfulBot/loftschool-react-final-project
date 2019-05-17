@@ -101,7 +101,7 @@ class Profile extends PureComponent {
         </Grid>
         {notificationVisible && (
           <Snackbar
-            message="Профиль успешно сохранен"
+            message="Профиль успешно сохранен. Теперь вы можете заказать такси"
             variant="success"
             open={notificationVisible}
           />

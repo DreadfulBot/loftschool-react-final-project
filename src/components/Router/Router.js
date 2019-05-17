@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
-// import PrivateRoute from '../PrivateRoute';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import PrivateRoute from '../PrivateRoute';
 import Login from '../Login';
+import Profile from '../Profile';
+import Logout from '../Logout';
+import Map from '../Map';
 
 // Реализуйте роутер
 
@@ -12,13 +15,13 @@ import Login from '../Login';
 class Router extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact component={Login} />
-          {/* <PrivateRoute path="/search" component={Search} /> */}
-          <Redirect to="/" />
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Login} />
+        <PrivateRoute path="/profile" component={Profile} />
+        <PrivateRoute path="/logout" component={Logout} />
+        <PrivateRoute path="/map" component={Map} />
+        <Redirect to="/" />
+      </Switch>
     );
   }
 }

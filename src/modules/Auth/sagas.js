@@ -1,5 +1,5 @@
 import { fork, call, take, put, cancel, cancelled } from 'redux-saga/effects';
-import { authRequest, authSuccess, authError, logoutRequest } from './actions';
+import { authRequest, authSuccess, authError, logoutRequest, logoutSuccess } from './actions';
 import { auth } from './api'; 
 
 function *loginFlow() {
@@ -11,6 +11,7 @@ function *loginFlow() {
 
         if(action.type === logoutRequest.toString()) {
             yield cancel(task);
+            yield put(logoutSuccess());
         }
     }
 }

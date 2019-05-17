@@ -27,8 +27,8 @@ const styles = theme => ({
 
 class Layout extends PureComponent {
   static propTypes = {
-    header: PropTypes.func,
-    footer: PropTypes.func
+    // header: PropTypes.func,
+    // footer: PropTypes.func
   };
 
   renderMain = className => {

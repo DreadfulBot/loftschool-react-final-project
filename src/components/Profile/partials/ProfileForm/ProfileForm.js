@@ -43,7 +43,7 @@ const ProfileSchema = Yup.object().shape({
     .max(50, 'Слишком длиное имя')
     .required('Укажите имя'),
   cardNumber: Yup.string()
-    .matches(isCardNumberRegex, 'Номер карты - цифра длинной 8 символов')
+    .matches(isCardNumberRegex, 'Номер карты - цифра длинной 16 символов')
     .required('Укажите номер карты'),
   expDate: Yup.date().required('Укажите дату'),
   cvv: Yup.string()

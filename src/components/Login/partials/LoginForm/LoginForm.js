@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { shallowEqual } from 'recompose';
 
 import { TextField } from 'formik-material-ui';
 import { withStyles } from '@material-ui/core/styles';
@@ -54,13 +53,6 @@ class LoginForm extends PureComponent {
   };
 
   handleFormSubmit = (values, { setSubmitting }) => {
-    const isChanged = !shallowEqual(this.getInitialValues(), values);
-
-    if (!isChanged) {
-      setSubmitting(false);
-      return;
-    }
-
     const { handleSubmit } = this.props;
     handleSubmit({
       ...values,

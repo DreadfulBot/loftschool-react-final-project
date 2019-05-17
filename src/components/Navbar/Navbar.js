@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { Link } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,7 +27,7 @@ const styles = {
 };
 
 function Navbar(props) {
-  const { classes } = props;
+  const { classes, isAuth } = props;
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
@@ -32,9 +35,27 @@ function Navbar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             Loft Taxi
           </Typography>
-          <Button color="inherit">Карта</Button>
-          <Button color="inherit">Профиль</Button>
-          <Button color="inherit">Войти</Button>
+
+          <Button color="inherit" component={Link} to="/map">
+            Карта
+          </Button>
+
+          <Button color="inherit" component={Link} to="/profile">
+            Профиль
+          </Button>
+
+          {isAuth && (
+            <Button color="inherit" component={Link} to="/logout">
+              Выйти
+            </Button>
+          )}
+
+          {!isAuth && (
+            <Button color="inherit" component={Link} to="/login">
+              Войти
+            </Button>
+          )}
+          
         </Toolbar>
       </AppBar>
     </div>
@@ -42,7 +63,12 @@ function Navbar(props) {
 }
 
 Navbar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  isAuth: PropTypes.bool
+};
+
+Navbar.defaultProps = {
+  isAuth: false
 };
 
 export default withStyles(styles)(Navbar);

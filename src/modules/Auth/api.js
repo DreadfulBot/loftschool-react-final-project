@@ -11,11 +11,11 @@ export const auth = (username, password) =>
       config
     )
     .then(response => {
-      const { data } = response;
+      const { data, status } = response;
 
-      const { success, error } = data;
+      const { error } = data;
 
-      if (!success) {
+      if (status !== 200) {
         const exception = { message: error || 'unable to auth' };
         throw exception;
       }

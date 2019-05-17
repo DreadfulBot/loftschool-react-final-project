@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import Navbar from '../Navbar';
+import { getIsAuthorized } from '../../modules/Auth';
 
-const Header = () => (
-  <Navbar />
-);
+class Header extends PureComponent {
+  render() {
+    const { isAuthorized } = this.props;
+    return <Navbar isAuth={isAuthorized !== null} />;
+  }
+}
 
-export default Header;
+const mapStateToProps = state => ({
+  isAuthorized: getIsAuthorized(state)
+});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

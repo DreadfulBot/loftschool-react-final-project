@@ -1,12 +1,18 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 
 import { Grid, Paper } from '@material-ui/core';
 
 import bg from '../../assets/login-bg.jpg';
 
 import { LoginForm } from './partials';
-import { authRequest, getError, getIsLoading } from '../../modules/Auth';
+import {
+  authRequest,
+  getError,
+  getIsLoading,
+  getIsAuthorized
+} from '../../modules/Auth';
 
 import { withStyles } from '@material-ui/core';
 import { withLoader } from '../../hocs';
@@ -62,18 +68,16 @@ class Login extends PureComponent {
   };
 
   render() {
-    const { classes, error } = this.props;
+    const { classes, error, isAuthorized } = this.props;
     const { user, password } = this.state;
+
+    if (isAuthorized) return <Redirect to="/profile" />;
+
     return (
       <Fragment>
         <div className={classes.background} />
 
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-        >
+        <Grid container direction="column" justify="center" alignItems="center">
           <Paper className={classes.paper}>
             <LoginForm
               user={user}
@@ -91,7 +95,8 @@ class Login extends PureComponent {
 
 const mapStateToProps = state => ({
   error: getError(state),
-  isLoading: getIsLoading(state)
+  isLoading: getIsLoading(state),
+  isAuthorized: getIsAuthorized(state)
 });
 
 const mapDispatchToProps = {
